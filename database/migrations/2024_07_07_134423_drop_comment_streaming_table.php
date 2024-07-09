@@ -6,29 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+      /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('streaming_id');
-            $table->unsignedBigInteger('user_id');
-            $table->text('comments_content');
-            $table->timestamps();
-            $table->softDeletes();
-            $table->foreign('streaming_id')->references('id')->on('streaming');
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-    
+        Schema::dropIfExists('comments_streaming');
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::create('comments_streaming', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('post_id');
+            $table->unsignedBigInteger('user_id');
+            $table->text('comments_content');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('user_id')->references('id')->on('users');
+        });
     }
 };

@@ -65,5 +65,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'pemilik-postingan' => \App\Http\Middleware\PemilikPostingan::class,
         'pemilik-comentar' => \App\Http\Middleware\PemilikComentar::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'owner' => \App\Http\Middleware\OwnerMiddleware::class,
+        
     ];
 }

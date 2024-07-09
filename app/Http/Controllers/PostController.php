@@ -15,7 +15,7 @@ class PostController extends Controller
     public function index ()
     {
         $posts = Post::all();
-        return PostDetailResource::collection($posts->loadMissing(['writer:id,username,firstname,lastname', 'comments:id,post_id,user_id,comments_content']));
+        return PostResource::collection($posts->loadMissing(['writer:id,username']));
     }
 
     public function show($id)
@@ -45,7 +45,7 @@ class PostController extends Controller
         $request['image'] = $image;
         $request['author'] = Auth::user()->id;
         $post = Post::create($request->all());
-        return new PostDetailResource($post->loadMissing('writer:id,username'));
+        return new PostResource($post->loadMissing('writer:id,username'));
     }
     
     public function update(Request $request, $id)

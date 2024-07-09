@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('layanan_pengaduan', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('streaming_id');
-            $table->unsignedBigInteger('user_id');
-            $table->text('comments_content');
+            $table->string('judullaporan');
+            $table->string('isilaporan');
+            $table->string('tanggalkejadian');
+            $table->string('instansiterlapor');
+            $table->string('lampiran');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('streaming_id')->references('id')->on('streaming');
-            $table->foreign('user_id')->references('id')->on('users');
         });
-    
     }
 
     /**
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('layanan_pengaduan');
     }
 };

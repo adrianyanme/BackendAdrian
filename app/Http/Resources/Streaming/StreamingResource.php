@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Streaming;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+class StreamingResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,15 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'news_content' => $this->news_content,
+            'thumbnail' => $this->thumbnail,
+            'judul_streaming' => $this->judul_streaming,
+            'youtube_link' => $this->youtube_link,
+            'deskribsi' => $this->deskribsi,
+            'status_stream' => $this->status_stream,
+            'author' => $this->author,
+            'comment_total' => $this->whenLoaded('comments', function () {
+                return $this->comments->count();
+            }),
             'created_at' => date_format($this->created_at, "d-m-y H:i:s"),
             'writer' => $this->whenLoaded('writer', function () {
                 return [

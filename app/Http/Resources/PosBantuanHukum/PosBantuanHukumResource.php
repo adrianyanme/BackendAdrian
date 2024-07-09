@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\PosBantuanHukum;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+class PosBantuanHukumResource extends JsonResource
 {
-    /**
+     /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
@@ -16,8 +16,16 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'news_content' => $this->news_content,
+            'namalengkap' => $this->namalengkap,
+            'nohp' => $this->nohp,
+            'email' => $this->email,
+            'deskribsi' => $this->deskribsi,
+            'suratgugatan' => $this->suratgugatan,
+            'suratketerangantidakmampu' => $this->suratketerangantidakmampu,
+            'author' => $this->author,
+            // 'comment_total' => $this->whenLoaded('comments', function () {
+            //     return $this->comments->count();
+            // }),
             'created_at' => date_format($this->created_at, "d-m-y H:i:s"),
             'writer' => $this->whenLoaded('writer', function () {
                 return [
