@@ -42,7 +42,7 @@ class StreamingController extends Controller
             $extension = $file->getClientOriginalExtension(); // Menggunakan ekstensi asli file
             $image = $filename . '.' . $extension;
 
-            Storage::putFileAs('thumbnails', $file, $image);
+            Storage::putFileAs('public/thumbnails', $file, $image);
         }
 
         $request['thumbnail'] = $image;

@@ -9,6 +9,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\jdh\JdhController;
 use App\Http\Controllers\LayananPengaduan\layananPengaduanController;
 use App\Http\Controllers\PosBantuanHukum\PosBantuanHukumController;
 use App\Http\Controllers\Streaming\CommentController as StreamingCommentController;
@@ -38,6 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
     Route::post('/streaming',[StreamingController::class, 'store']);
+    Route::post('/jdh',[JdhController::class,'store']);
 });
 
 Route::get('/posts',[PostController::class,'index']);
@@ -59,7 +61,11 @@ Route::get('/streaming',[StreamingController::class,'index']);
 Route::get('/streaming/{id}',[StreamingController::class,'show']);
 
 Route::post('/layanan-pengaduan',[layananPengaduanController::class,'store']);
+Route::get('/layanan-pengaduan',[layananPengaduanController::class,'index']);
 
+Route::get('/jdh',[JdhController::class,'index']);
+Route::get('/jdh/{id}', [JdhController::class, 'show']);
+Route::patch('jdh/{id}',[JdhController::class,'update']);
 
 
 
