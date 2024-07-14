@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Resources\UserResourceAll;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -75,7 +76,7 @@ class AuthenticationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'username' => 'required',
+            'username' => 'required|unique',
             'firstname' => 'required',
             'lastname' => 'required',
             'password' => 'required|min:6',
@@ -91,6 +92,7 @@ class AuthenticationController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'password' => Hash::make($request->password),
+            'role' => ('user')
         ]);
 
         Profile::create([
@@ -100,8 +102,6 @@ class AuthenticationController extends Controller
 
         // Kirim email verifikasi
         Mail::to($user->email)->send(new VerifyEmail($user));
-
-
 
         return new UserResource($user);
     }
@@ -120,6 +120,12 @@ class AuthenticationController extends Controller
         }
     
         return response()->json(['message' => 'User not found.'], 404);
+    }
+
+    public function index()
+    {
+        $data = User::all();
+        return UserResourceAll::collection($data);
     }
     
 

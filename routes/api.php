@@ -4,29 +4,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\jdh\JdhController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\Forum\ForumController;
+use App\Http\Controllers\Forum\CommentController;
+use App\Models\LayananPengaduan\LayananPengaduan;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\jdh\JdhController;
-use App\Http\Controllers\LayananPengaduan\layananPengaduanController;
-use App\Http\Controllers\PosBantuanHukum\PosBantuanHukumController;
-use App\Http\Controllers\Streaming\CommentController as StreamingCommentController;
 use App\Http\Controllers\Streaming\StreamingController;
-use App\Models\LayananPengaduan\LayananPengaduan;
+use App\Http\Controllers\Persalinan\PersalinanController;
+use App\Http\Controllers\PosBantuanHukum\PosBantuanHukumController;
+use App\Http\Controllers\GugatanSederhana\GugatanSederhanaController;
+use App\Http\Controllers\LayananPengaduan\layananPengaduanController;
+use App\Http\Controllers\Forum\ForumController as ForumForumController;
+use App\Http\Controllers\Streaming\CommentController as StreamingCommentController;
+
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/logout',[AuthenticationController::class, 'logout']);
     Route::get('/me',[AuthenticationController::class, 'me']);
-    Route::post('/posts',[PostController::class, 'store']);
-    Route::patch('/posts/{id}',[PostController::class, 'update'])->middleware('pemilik-postingan');
-    Route::delete('/posts/{id}',[PostController::class, 'destroy'])->middleware('pemilik-postingan');
+    // Route::post('/posts',[PostController::class, 'store']);
+    // Route::patch('/posts/{id}',[PostController::class, 'update'])->middleware('pemilik-postingan');
+    // Route::delete('/posts/{id}',[PostController::class, 'destroy'])->middleware('pemilik-postingan');
 
-
-    Route::post('/comment',[CommentController::class, 'store']);
-    Route::patch('/comment/{id}',[CommentController::class, 'update'])->middleware('pemilik-comentar');
-    Route::delete('/comment/{id}',[CommentController::class, 'destroy'])->middleware('pemilik-comentar');
 
  
     Route::patch('/streaming/{id}',[StreamingController::class, 'update'])->middleware('owner:Streaming,Streaming');
@@ -35,19 +36,40 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::post('/posbakum',[PosBantuanHukumController::class,'store']);
 
+    Route::post('persalinan',[PersalinanController::class,'store']);
+
+    Route::get('schedules/{id}', [ScheduleController::class, 'show']);
+
+    Route::post('gugatansederhana',[GugatanSederhanaController::class, 'store']);
+    Route::get('gugatansederhana',[GugatanSederhanaController::class, 'index']);
+    Route::get('gugatansederhana/{id}',[GugatanSederhanaController::class, 'show']);
+    Route::post('/forums', [ForumForumController::class, 'store']);
+    Route::post('/forums/comment',[CommentController::class,'store']);
+    Route::post('/forums/{id}/like', [ForumController::class, 'like']);
+    Route::post('/forums/{id}/dislike', [ForumController::class, 'dislike']);
+
+    // Route::post('/posts/{id}/like', [PostController::class, 'like']);
+    // Route::post('/posts/{id}/dislike', [PostController::class, 'dislike']);
+
 });
 
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:superadmin'])->group(function(){
     Route::post('/streaming',[StreamingController::class, 'store']);
     Route::post('/jdh',[JdhController::class,'store']);
 });
+Route::get('/forums', [ForumController::class, 'index']);
+Route::get('/forums/{id}', [ForumController::class, 'show']);
+Route::delete('/forums/{id}', [ForumController::class, 'destroy']);
+Route::get('/forums', [ForumController::class, 'index']);
+Route::get('/forums/{id}', [ForumController::class, 'show']);
 
-Route::get('/posts',[PostController::class,'index']);
-Route::get('/posts/{id}',[PostController::class,'show']);
+// Route::get('/posts',[PostController::class,'index']);
+// Route::get('/posts/{id}',[PostController::class,'show']);
 
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('register', [AuthenticationController::class, 'register']);
 Route::get('verify/{id}', [AuthenticationController::class, 'verifyEmail']);
+Route::get('users',[AuthenticationController::class,'index']);
 
 Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail']);
 
@@ -66,6 +88,4 @@ Route::get('/layanan-pengaduan',[layananPengaduanController::class,'index']);
 Route::get('/jdh',[JdhController::class,'index']);
 Route::get('/jdh/{id}', [JdhController::class, 'show']);
 Route::patch('jdh/{id}',[JdhController::class,'update']);
-
-
 

@@ -35,8 +35,8 @@ class LayananPengaduanController extends Controller
 
         $data = $request->all();
         $data['lampiran'] = $lampiran;
-
         $pengaduan = LayananPengaduan::create($data);
+
 
         return response()->json($pengaduan, 201);
     }

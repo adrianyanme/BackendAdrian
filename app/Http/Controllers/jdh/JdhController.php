@@ -94,6 +94,6 @@ class JdhController extends Controller
 
         $jdh->update($data);
 
-        return new StreamingResource($streaming->loadMissing('writer:id,username'));
+        return response()->json($jdh, 201);
     }
 }

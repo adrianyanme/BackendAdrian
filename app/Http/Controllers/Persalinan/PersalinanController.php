@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Persalinan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Persalinan\PersalinanResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Persalinan\Persalinan;
+use App\Http\Resources\Persalinan\PersalinanResource;
+use App\Mail\Persalinan\Persalinan as PersalinanPersalinan;
 
 class PersalinanController extends Controller
 {
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'streaming_id' => 'required|exists:streaming,id',
             'email' => 'required',
             'jenissalinan' => 'required',
             'putusanyangdiminta' => 'required',
@@ -21,12 +23,15 @@ class PersalinanController extends Controller
             'statuspemohon' => 'required',
             'noperkara' => 'required',
         ]);
+        $currentUser = Auth::user();
 
-        $request['user_id'] = auth()->user()->id;
+
+        $request['author'] = Auth::user()->id;
 
         $comment =Persalinan::create($request->all());
 
-      
-        return new PersalinanResource($comment->loadMissing(['commentator:id,username']));
+        Mail::to($request->email)->send(new PersalinanPersalinan($currentUser, $request->namapemohon,$request->noperkara));
+
+        return new PersalinanResource($comment->loadMissing(['writer:id,username']));
     }
 }
