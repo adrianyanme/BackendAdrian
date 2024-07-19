@@ -22,9 +22,8 @@ class ForumController extends Controller
     public function show($id)
     {
         $forum = Forum::findOrFail($id);
-        return new ForumDetailResource($forum->loadMissing('writer:id,username','comments:id,forums_id,user_id,comments_content'));
+        return new ForumDetailResource($forum->loadMissing('writer:id,username','comments:id,forums_id,user_id,comments_content,created_at'));
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate([

@@ -76,7 +76,7 @@ class AuthenticationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'username' => 'required|unique',
+            'username' => 'required|unique:users', // Perbaikan di sini
             'firstname' => 'required',
             'lastname' => 'required',
             'password' => 'required|min:6',

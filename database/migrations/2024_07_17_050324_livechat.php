@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('livechat', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('streaming_id');
             $table->unsignedBigInteger('user_id');
-            $table->text('comments_content');
+            $table->text('chat');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('streaming_id')->references('id')->on('streaming');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('livechat');
     }
 };

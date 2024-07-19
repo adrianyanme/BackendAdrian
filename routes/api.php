@@ -19,7 +19,7 @@ use App\Http\Controllers\GugatanSederhana\GugatanSederhanaController;
 use App\Http\Controllers\LayananPengaduan\layananPengaduanController;
 use App\Http\Controllers\Forum\ForumController as ForumForumController;
 use App\Http\Controllers\Streaming\CommentController as StreamingCommentController;
-
+use App\Http\Controllers\Streaming\LivechatController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/logout',[AuthenticationController::class, 'logout']);
@@ -33,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::patch('/streaming/{id}',[StreamingController::class, 'update'])->middleware('owner:Streaming,Streaming');
     Route::delete('/streaming/{id}',[StreamingController::class, 'destroy']);
     Route::post('streaming/comment',[StreamingCommentController::class, 'store']);
+    Route::post('livechat', [LivechatController::class,'store']);
 
     Route::post('/posbakum',[PosBantuanHukumController::class,'store']);
 
@@ -47,6 +48,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/forums/comment',[CommentController::class,'store']);
     Route::post('/forums/{id}/like', [ForumController::class, 'like']);
     Route::post('/forums/{id}/dislike', [ForumController::class, 'dislike']);
+    Route::delete('/forums/{id}', [ForumController::class, 'destroy']);
+    
+    
 
     // Route::post('/posts/{id}/like', [PostController::class, 'like']);
     // Route::post('/posts/{id}/dislike', [PostController::class, 'dislike']);
@@ -58,10 +62,10 @@ Route::middleware(['auth:sanctum', 'role:superadmin'])->group(function(){
     Route::post('/jdh',[JdhController::class,'store']);
 });
 Route::get('/forums', [ForumController::class, 'index']);
-Route::get('/forums/{id}', [ForumController::class, 'show']);
-Route::delete('/forums/{id}', [ForumController::class, 'destroy']);
+
 Route::get('/forums', [ForumController::class, 'index']);
 Route::get('/forums/{id}', [ForumController::class, 'show']);
+
 
 // Route::get('/posts',[PostController::class,'index']);
 // Route::get('/posts/{id}',[PostController::class,'show']);

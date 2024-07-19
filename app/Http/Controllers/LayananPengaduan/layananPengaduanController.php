@@ -30,7 +30,7 @@ class LayananPengaduanController extends Controller
         if ($request->hasFile('lampiran')) {
             $file = $request->file('lampiran');
             $lampiran = $file->getClientOriginalName();
-            Storage::putFileAs('public/lampiran', $file, $lampiran);
+            Storage::putFileAs('public/lampiranlayananpengaduan', $file, $lampiran);
         }
 
         $data = $request->all();
@@ -38,6 +38,6 @@ class LayananPengaduanController extends Controller
         $pengaduan = LayananPengaduan::create($data);
 
 
-        return response()->json($pengaduan, 201);
+        return response()->json("success", 201);
     }
 }

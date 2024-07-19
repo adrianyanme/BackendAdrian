@@ -21,7 +21,7 @@ class StreamingController extends Controller
     public function show($id)
     {
         $comment = Streaming::with('writer:id,username,firstname,lastname')->findOrFail($id);
-        return new StreamingDetailResource($comment->loadMissing(['writer:id,username,firstname,lastname', 'comments:id,streaming_id,user_id,comments_content']));
+        return new StreamingDetailResource($comment->loadMissing(['writer:id,username,firstname,lastname', 'comments:id,streaming_id,user_id,comments_content','livechats:id,streaming_id,user_id,chat']));
     }
 
 

@@ -31,6 +31,19 @@ class StreamingDetailResource extends JsonResource
                     'lastname' => $this->writer->lastname,
                 ];
             }),
+            'livechat' => $this->whenLoaded('livechats', function (){
+                return $this->livechats->map(function ($livechat){
+                    return [
+                        'id' => $livechat->id,
+                        'chat' => $livechat->chat,
+                        'writer' =>[
+                            'id' => $livechat->writer->id,
+                            'username' => $livechat->writer->username
+                        ]
+
+                    ];
+                });
+            }),
             'comments' => $this->whenLoaded('comments', function () {
                 return $this->comments->map(function ($comment) {
                     return [

@@ -32,4 +32,9 @@ class Streaming extends Model
    {
        return $this->hasMany(Comment::class, 'streaming_id', 'id');
    }
+
+   public function livechats(): HasMany
+   {
+       return $this->hasMany(Livechat::class, 'streaming_id', 'id');
+   }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Forum;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ForumDetailResource extends JsonResource
@@ -14,6 +15,15 @@ class ForumDetailResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = Auth::guard('sanctum')->user();
+        $userLiked = null;
+        $userDisliked = null;
+
+        if ($user) {
+            $userLiked = $this->likes()->where('user_id', $user->id)->exists();
+            $userDisliked = $this->dislikes()->where('user_id', $user->id)->exists();
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -21,6 +31,10 @@ class ForumDetailResource extends JsonResource
             'image' => $this->image,
             'tags' => $this->tags,
             'author' => $this->author,
+            'likes_count' => $this->likes()->count(),
+            'dislikes_count' => $this->dislikes()->count(),
+            'user_liked' => $userLiked,
+            'user_disliked' => $userDisliked,
             'comment_total' => $this->whenLoaded('comments', function () {
                 return $this->comments->count();
             }),
@@ -36,10 +50,13 @@ class ForumDetailResource extends JsonResource
                     return [
                         'id' => $comment->id,
                         'comments_content' => $comment->comments_content,
+                        'created_at' => $comment->created_at,
                         'commentator' => [
                             'id' => $comment->commentator->id,
                             'username' => $comment->commentator->username,
+                            
                         ],
+                        
                     ];
                 });
             }),

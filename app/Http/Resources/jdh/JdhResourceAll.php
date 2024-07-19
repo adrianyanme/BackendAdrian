@@ -18,6 +18,7 @@ class JdhResourceAll extends JsonResource
             'id' => $this->id,
             'judul' => $this->judul,
             'deskripsi' => $this->deskripsi,
+            'created_at' => $this->created_at
         ];
     }
 }
