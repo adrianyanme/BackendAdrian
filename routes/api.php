@@ -21,9 +21,8 @@ use App\Http\Controllers\Forum\ForumController as ForumForumController;
 use App\Http\Controllers\Streaming\CommentController as StreamingCommentController;
 use App\Http\Controllers\Streaming\LivechatController;
 
-Route::middleware(['auth:sanctum'])->group(function(){
-    Route::get('/logout',[AuthenticationController::class, 'logout']);
-    Route::get('/me',[AuthenticationController::class, 'me']);
+Route::middleware(['auth:sanctum', 'verified'])->group(function(){
+    
     // Route::post('/posts',[PostController::class, 'store']);
     // Route::patch('/posts/{id}',[PostController::class, 'update'])->middleware('pemilik-postingan');
     // Route::delete('/posts/{id}',[PostController::class, 'destroy'])->middleware('pemilik-postingan');
@@ -55,6 +54,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::post('/posts/{id}/like', [PostController::class, 'like']);
     // Route::post('/posts/{id}/dislike', [PostController::class, 'dislike']);
 
+});
+
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('/logout',[AuthenticationController::class, 'logout']);
+    Route::get('/me',[AuthenticationController::class, 'me']);
 });
 
 Route::middleware(['auth:sanctum', 'role:superadmin'])->group(function(){

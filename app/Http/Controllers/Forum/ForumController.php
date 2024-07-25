@@ -16,13 +16,13 @@ class ForumController extends Controller
     public function index()
     {
         $forums = Forum::all();
-        return ForumResource::collection($forums->loadMissing(['writer:id,username','comments']));
+        return ForumResource::collection($forums->loadMissing(['writer:id,username,profileimg','comments']));
     }
 
     public function show($id)
     {
         $forum = Forum::findOrFail($id);
-        return new ForumDetailResource($forum->loadMissing('writer:id,username','comments:id,forums_id,user_id,comments_content,created_at'));
+        return new ForumDetailResource($forum->loadMissing('writer:id,username,profileimg','comments:id,forums_id,user_id,comments_content,created_at'));
     }
     public function store(Request $request)
     {

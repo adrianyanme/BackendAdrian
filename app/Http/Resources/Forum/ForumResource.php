@@ -29,6 +29,7 @@ class ForumResource extends JsonResource
                 return [
                     'id' => $this->writer->id,
                     'username' => $this->writer->username,
+                    'profileimg' => $this->writer->profileimg
                 ];
             }),
             'comment_total' => $this->whenLoaded('comments', function () {

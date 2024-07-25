@@ -24,7 +24,10 @@ class User extends Authenticatable
         'firstname',
         'lastname',
         'password',
-        'remember_token'
+        'remember_token',
+        'profileimg',
+        'ktp_image',
+        'nik'
     ];
 
     /**
@@ -53,6 +56,6 @@ class User extends Authenticatable
 
     public function likes()
     {
-        return $this->hasMany(Like::class);
+        return $this->hasMany(ForumLike::class);
     }
 }

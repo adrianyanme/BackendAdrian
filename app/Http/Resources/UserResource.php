@@ -23,6 +23,9 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'role' => $this->role,
+            'ktp_image' => $this->ktp_image,
+            'nik' => $this->nik,
+            'profileimg' => $this->profileimg
         ];
     }
 }
