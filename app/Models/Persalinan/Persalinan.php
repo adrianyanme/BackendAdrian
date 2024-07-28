@@ -14,7 +14,7 @@ class Persalinan extends Model
     protected $table = 'persalinan';
 
     protected $fillable = [
-        'email','jenissalinan','putusanyangdiminta','namapemohon','nohp','statuspemohon','noperkara','author'
+        'email','jenissalinan','putusanyangdiminta','namapemohon','nohp','statuspemohon','noperkara','author','namaparapihak','ktppemohon','kkpemohon','relaaspemberitahuanputusan','catatanpemohon','status'
     ];
 
     public function writer(): BelongsTo

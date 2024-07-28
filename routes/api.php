@@ -32,13 +32,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::patch('/streaming/{id}',[StreamingController::class, 'update'])->middleware('owner:Streaming,Streaming');
     Route::delete('/streaming/{id}',[StreamingController::class, 'destroy']);
     Route::post('streaming/comment',[StreamingCommentController::class, 'store']);
+
     Route::post('livechat', [LivechatController::class,'store']);
 
     Route::post('/posbakum',[PosBantuanHukumController::class,'store']);
 
     Route::post('persalinan',[PersalinanController::class,'store']);
 
-    Route::get('schedules/{id}', [ScheduleController::class, 'show']);
+    
 
     Route::post('gugatansederhana',[GugatanSederhanaController::class, 'store']);
     Route::get('gugatansederhana',[GugatanSederhanaController::class, 'index']);
@@ -48,6 +49,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::post('/forums/{id}/like', [ForumController::class, 'like']);
     Route::post('/forums/{id}/dislike', [ForumController::class, 'dislike']);
     Route::delete('/forums/{id}', [ForumController::class, 'destroy']);
+
+
+    Route::put('/streamings/{id}/status', [StreamingController::class, 'updateStatus']); // Endpoint untuk update status
+    Route::delete('/streamings/{id}', [StreamingController::class, 'destroy']); // Endpoint untuk hapus streaming
+    Route::post('schedules', [ScheduleController::class, 'store']);
+    Route::delete('schedules/{id}', [ScheduleController::class, 'destroy']);
+    Route::get('/persalinan', [PersalinanController::class, 'index']);
+    Route::get('/posbantuanhukum', [PosBantuanHukumController::class, 'index']);
+    Route::post('/send-whatsapp', [PersalinanController::class, 'sendWhatsApp']);
     
     
 
@@ -64,7 +74,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
 Route::middleware(['auth:sanctum', 'role:superadmin'])->group(function(){
     Route::post('/streaming',[StreamingController::class, 'store']);
     Route::post('/jdh',[JdhController::class,'store']);
+    Route::get('users',[AuthenticationController::class,'index']);
+    Route::post('users/{id}',[AuthenticationController::class,'updateVerificationStatus']);
 });
+Route::get('schedules/{id}', [ScheduleController::class, 'show']);
 Route::get('/forums', [ForumController::class, 'index']);
 
 Route::get('/forums', [ForumController::class, 'index']);
@@ -77,15 +90,15 @@ Route::get('/forums/{id}', [ForumController::class, 'show']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('register', [AuthenticationController::class, 'register']);
 Route::get('verify/{id}', [AuthenticationController::class, 'verifyEmail']);
-Route::get('users',[AuthenticationController::class,'index']);
+
 
 Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail']);
 
 Route::get('schedules', [ScheduleController::class, 'index']);
-Route::post('schedules', [ScheduleController::class, 'store']);
+
 Route::get('schedules/{id}', [ScheduleController::class, 'show']);
 Route::put('schedules/{id}', [ScheduleController::class, 'update']);
-Route::delete('schedules/{id}', [ScheduleController::class, 'destroy']);
+
 
 Route::get('/streaming',[StreamingController::class,'index']);
 Route::get('/streaming/{id}',[StreamingController::class,'show']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -16,6 +17,13 @@ class ScheduleController extends Controller
     // Store a new schedule
     public function store(Request $request)
     {
+        $user = Auth::user();
+
+        // Cek apakah pengguna adalah superadmin
+        if ($user->role != 'superadmin') {
+            return response()->json(['message' => 'You do not have permission to create a schedule'], 403);
+        }
+
         $validatedData = $request->validate([
             'hearing_number' => 'required|string|max:255',
             'agenda' => 'required|string|max:255',
@@ -52,6 +60,13 @@ class ScheduleController extends Controller
     // Delete a specific schedule
     public function destroy($id)
     {
+        $user = Auth::user();
+
+        // Cek apakah pengguna adalah superadmin
+        if ($user->role != 'superadmin') {
+            return response()->json(['message' => 'You do not have permission to delete this schedule'], 403);
+        }
+
         $schedule = Schedule::findOrFail($id);
         $schedule->delete();
 

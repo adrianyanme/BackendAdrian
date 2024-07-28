@@ -75,4 +75,16 @@ class PosBantuanHukumController extends Controller
             return response()->json(['message' => 'Failed to process request. Please try again later.'], 500);
         }
     }
+    public function index()
+    {
+        $user = Auth::user();
+
+        // Cek apakah pengguna adalah superadmin
+        if ($user->role != 'superadmin') {
+            return response()->json(['message' => 'You do not have permission to view this data'], 403);
+        }
+
+        $posBantuanHukum = PosBantuanHukum::all();
+        return PosBantuanHukumResource::collection($posBantuanHukum);
+    }
 }

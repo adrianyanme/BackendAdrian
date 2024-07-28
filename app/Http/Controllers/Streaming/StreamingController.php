@@ -26,32 +26,39 @@ class StreamingController extends Controller
 
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'judul_streaming' => 'required',
-            'youtube_link' => 'required',
-            'deskribsi' => 'required',
-            'status_stream' => 'required',
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif', // Menambahkan validasi file
-        ]);
+{
+    $user = Auth::user();
 
-        $image = null;
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filename = $this->RandomString();
-            $extension = $file->getClientOriginalExtension(); // Menggunakan ekstensi asli file
-            $image = $filename . '.' . $extension;
-
-            Storage::putFileAs('public/thumbnails', $file, $image);
-        }
-
-        $request['thumbnail'] = $image;
-        $request['author'] = Auth::user()->id;
-
-        $streaming = Streaming::create($request->all());
-
-        return new StreamingResource($streaming->loadMissing('writer:id,username'));
+    // Cek apakah pengguna adalah superadmin
+    if ($user->role != 'superadmin') {
+        return response()->json(['message' => 'You do not have permission to create a streaming'], 403);
     }
+
+    $validated = $request->validate([
+        'judul_streaming' => 'required',
+        'youtube_link' => 'required',
+        'deskribsi' => 'required',
+        'status_stream' => 'required',
+        'file' => 'required|file|mimes:jpeg,png,jpg,gif', // Menambahkan validasi file
+    ]);
+
+    $image = null;
+    if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $filename = $this->RandomString();
+        $extension = $file->getClientOriginalExtension(); // Menggunakan ekstensi asli file
+        $image = $filename . '.' . $extension;
+
+        Storage::putFileAs('public/thumbnails', $file, $image);
+    }
+
+    $request['thumbnail'] = $image;
+    $request['author'] = $user->id;
+
+    $streaming = Streaming::create($request->all());
+
+    return new StreamingResource($streaming->loadMissing('writer:id,username'));
+}
 
     private function RandomString($length = 10)
     {
@@ -75,15 +82,41 @@ class StreamingController extends Controller
     // Ambil hanya kolom yang ada dalam request dan perbarui model.
     $streaming->update($request->only('judul_streaming','youtube_link','deskribsi','status_stream','file'));
 
-    // Kembalikan resource dengan data yang diperbarui, termasuk relasi yang diminta.
     return new StreamingResource($streaming->loadMissing('writer:id,username'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status_stream' => 'required',
+        ]);
+
+        $streaming = Streaming::findOrFail($id);
+        $user = Auth::user();
+
+        // Cek apakah pengguna adalah superadmin
+        if ($user->role != 'superadmin') {
+            return response()->json(['message' => 'You do not have permission to update the status'], 403);
+        }
+
+        $streaming->status_stream = $request->status_stream;
+        $streaming->save();
+
+        return new StreamingResource($streaming->loadMissing('writer:id,username'));
     }
 
     public function destroy($id)
     {
         $streaming = Streaming::findOrFail($id);
+        $user = Auth::user();
+
+        // Cek apakah pengguna adalah superadmin
+        if ($user->role != 'superadmin') {
+            return response()->json(['message' => 'You do not have permission to delete this streaming'], 403);
+        }
+
         $streaming->delete();
-        return new StreamingResource($streaming->loadMissing('writer:id,username'));
+        return response()->json(['message' => 'Streaming Successfully Deleted']);
     }
 
 }

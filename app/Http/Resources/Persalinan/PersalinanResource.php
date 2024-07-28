@@ -34,6 +34,12 @@ class PersalinanResource extends JsonResource
                     'username' => $this->writer->username,
                 ];
             }),
+            'namaparapihak' => $this->namaparapihak,
+            'ktppemohon' => $this->ktppemohon,
+            'kkpemohon' => $this->kkpemohon,
+            'relaaspemberitahuanputusan' => $this->relaaspemberitahuanputusan,
+            'catatanpemohon' => $this->catatanpemohon,
+            'status' => $this->status,
         ];
     }
 }

@@ -24,6 +24,7 @@ class UserResourceAll extends JsonResource
             'profileimg' => $this->profileimg,
             'ktp_image' => $this->ktp_image,
             'nik' => $this->nik,
+            'verified' => $this->verified
         ];
     }
 }

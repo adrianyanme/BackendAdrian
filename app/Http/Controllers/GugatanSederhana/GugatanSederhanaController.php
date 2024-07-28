@@ -19,7 +19,7 @@ class GugatanSederhanaController extends Controller
     public function index()
     {
         $data = GugatanSederhana::all();
-        return GugatanSederhanaResourceAll::collection($data);
+        return GugatanSederhanaResourceAll::collection($data->loadMissing('writer:id,username,firstname,lastname'));
     }
     public function show($id)
     {

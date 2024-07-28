@@ -57,11 +57,18 @@ class ForumController extends Controller
     }
 
     public function destroy($id)
-    {
-        $streaming = Forum::findOrFail($id);
-        $streaming->delete();
-        return response()->json(['message' => 'Forum Successfully Deleted']);
+{
+    $forum = Forum::findOrFail($id);
+    $user = Auth::user();
+
+    // Cek apakah pengguna adalah pemilik forum atau superadmin
+    if ($forum->author != $user->id && $user->role != 'superadmin') {
+        return response()->json(['message' => 'You do not have permission to delete this forum'], 403);
     }
+
+    $forum->delete();
+    return response()->json(['message' => 'Forum Successfully Deleted']);
+}
 
     public function like($id)
     {

@@ -27,7 +27,9 @@ class User extends Authenticatable
         'remember_token',
         'profileimg',
         'ktp_image',
-        'nik'
+        'nik',
+        'verified'
+        
     ];
 
     /**
