@@ -22,7 +22,7 @@ class ForumController extends Controller
     public function show($id)
     {
         $forum = Forum::findOrFail($id);
-        return new ForumDetailResource($forum->loadMissing('writer:id,username,profileimg,role','comments:id,forums_id,user_id,comments_content,created_at'));
+        return new ForumDetailResource($forum->loadMissing('writer:id,username,profileimg,role','comments:id,forums_id,user_id,comments_content,created_at,role'));
     }
     public function store(Request $request)
     {
