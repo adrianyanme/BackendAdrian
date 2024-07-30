@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Forum;
 use App\Models\ForumLike;
 use App\Models\Forum\Forum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -25,33 +26,36 @@ class ForumController extends Controller
         return new ForumDetailResource($forum->loadMissing('writer:id,username,profileimg,role','comments:id,forums_id,user_id,comments_content,created_at'));
     }
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required',
-        'content' => 'required',
-        'tags' => 'required',
-        'files.*' => 'file|mimes:jpeg,png,jpg', // Menambahkan validasi file
-    ]);
-
-    $images = [];
-    if ($request->hasFile('files')) {
-        foreach ($request->file('files') as $file) {
-            $filename = $this->RandomString();
-            $extension = $file->getClientOriginalExtension(); // Menggunakan ekstensi asli file
-            $image = $filename . '.' . $extension;
-
-            Storage::putFileAs('public/forum', $file, $image);
-            $images[] = $image;
+    {
+        $validated = $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'tags' => 'required',
+            'files.*' => 'file|mimes:jpeg,png,jpg', // Menambahkan validasi file
+        ]);
+    
+        $images = [];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filename = $this->RandomString();
+                $extension = $file->getClientOriginalExtension(); // Menggunakan ekstensi asli file
+                $image = $filename . '.' . $extension;
+    
+                Storage::putFileAs('public/forum', $file, $image);
+                $images[] = $image;
+            }
         }
+    
+        // Debugging
+        Log::info('Images: ' . json_encode($images));
+    
+        $request['images'] = json_encode($images);
+        $request['author'] = Auth::user()->id;
+    
+        $forum = Forum::create($request->all());
+    
+        return new ForumResource($forum->loadMissing('writer:id,username'));
     }
-
-    $request['images'] = json_encode($images);
-    $request['author'] = Auth::user()->id;
-
-    $forum = Forum::create($request->all());
-
-    return new ForumResource($forum->loadMissing('writer:id,username,profileimg'));
-}
 
     private function RandomString($length = 10)
     {
