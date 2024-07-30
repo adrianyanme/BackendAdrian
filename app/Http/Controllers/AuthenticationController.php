@@ -34,7 +34,12 @@ class AuthenticationController extends Controller
             ]);
         }
 
-        return $user->createToken('user login')->plainTextToken;
+        $token = $user->createToken('user login')->plainTextToken;
+
+        return response()->json([
+            'token' => $token,
+            'role' => $user->role,
+        ]);
     }
 
     public function logout(Request $request)
@@ -49,7 +54,7 @@ class AuthenticationController extends Controller
     // public function updateProfile(Request $request)
     // {
     //     $user = Auth::user();
-    
+
     //     $validator = Validator::make($request->all(), [
     //         'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
     //         'firstname' => 'sometimes|required',
@@ -57,11 +62,11 @@ class AuthenticationController extends Controller
     //         'ktp_image' => 'sometimes|required|image|mimes:jpeg,png,jpg|max:2048',
     //         'profileimg' => 'sometimes|required|image|mimes:jpeg,png,jpg|max:2048',
     //     ]);
-    
+
     //     if ($validator->fails()) {
     //         return response()->json(['errors' => $validator->errors()], 422);
     //     }
-    
+
     //     if ($request->hasFile('ktp_image')) {
     //         $file = $request->file('ktp_image');
     //         if ($file->isValid()) {
@@ -72,7 +77,7 @@ class AuthenticationController extends Controller
     //             throw new \Exception('Invalid file ktp image.');
     //         }
     //     }
-    
+
     //     if ($request->hasFile('profileimg')) {
     //         $file = $request->file('profileimg');
     //         if ($file->isValid()) {
@@ -83,7 +88,7 @@ class AuthenticationController extends Controller
     //             throw new \Exception('Invalid file uploaded profileimg.');
     //         }
     //     }
-    
+
     //     // Update attributes manually
     //     if ($request->has('email')) {
     //         $user->email = $request->email;
@@ -94,9 +99,9 @@ class AuthenticationController extends Controller
     //     if ($request->has('lastname')) {
     //         $user->lastname = $request->lastname;
     //     }
-    
+
     //     $user->save(); 
-    
+
     //     return new UserResource($user);
     // End of Selection
     public function register(Request $request)
