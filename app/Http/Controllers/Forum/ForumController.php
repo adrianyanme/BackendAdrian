@@ -50,7 +50,7 @@ class ForumController extends Controller
 
     $forum = Forum::create($request->all());
 
-    return new ForumResource($forum->loadMissing('writer:id,username'));
+    return new ForumResource($forum->loadMissing('writer:id,username,profileimg'));
 }
 
     private function RandomString($length = 10)

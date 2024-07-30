@@ -29,6 +29,7 @@ class ForumDetailResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'image' => $this->image,
+            'images' => $this->images,
             'tags' => $this->tags,
             'author' => $this->author,
             'likes_count' => $this->likes()->count(),
