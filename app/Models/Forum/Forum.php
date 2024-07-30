@@ -17,7 +17,7 @@ class Forum extends Model
     protected $table = 'forums';
 
     protected $fillable = [
-        'title','content','image','tags','author'
+        'title','content','image','tags','author', 'images' => 'array',
     ];
 
     public function writer(): BelongsTo
