@@ -43,7 +43,8 @@ class ForumDetailResource extends JsonResource
                 return [
                     'id' => $this->writer->id,
                     'username' => $this->writer->username,
-                    'profileimg' => $this->writer->profileimg
+                    'profileimg' => $this->writer->profileimg,
+                    'role' => $this->writer->role
                 ];
             }),
             'comments' => $this->whenLoaded('comments', function () {
