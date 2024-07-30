@@ -58,8 +58,6 @@ class ForumDetailResource extends JsonResource
                             'username' => $comment->commentator->username,
                             'profileimg' => $comment->commentator->profileimg,
                             'role' => $comment->commentator->role
-
-                            
                         ],
                         
                     ];
