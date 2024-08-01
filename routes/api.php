@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::post('/forums/{id}/like', [ForumController::class, 'like']);
     Route::post('/forums/{id}/dislike', [ForumController::class, 'dislike']);
     Route::delete('/forums/{id}', [ForumController::class, 'destroy']);
+    Route::put('/forums/{id}', [ForumController::class, 'update']);
 
 
     Route::put('/streamings/{id}/status', [StreamingController::class, 'updateStatus']); // Endpoint untuk update status
