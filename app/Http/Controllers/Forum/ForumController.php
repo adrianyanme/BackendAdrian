@@ -141,7 +141,7 @@ class ForumController extends Controller
         $forum = Forum::findOrFail($id);
         $user = Auth::user();
 
-        // Cek apakah pengguna adalah pemilik forum atau superadmin
+        
         if ($forum->author != $user->id && $user->role != 'superadmin') {
             return response()->json(['message' => 'You do not have permission to update this forum'], 403);
         }
@@ -150,9 +150,9 @@ class ForumController extends Controller
             'title' => 'required',
             'content' => 'required',
             'tags' => 'required',
-            'files.*' => 'file|mimes:jpeg,png,jpg', // Menambahkan validasi file
-            'delete_files' => 'array', // Validasi untuk file yang akan dihapus
-            'delete_files.*' => 'string', // Validasi untuk nama file yang akan dihapus
+            'files.*' => 'file|mimes:jpeg,png,jpg',
+            'delete_files' => 'array',
+            'delete_files.*' => 'string',
         ]);
 
         $images = json_decode($forum->images, true) ?? [];
