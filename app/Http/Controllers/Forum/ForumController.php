@@ -138,25 +138,27 @@ class ForumController extends Controller
     public function update(Request $request, $id)
     {
         Log::info('Request Data: ', $request->all());
+        Log::info('Request Files: ', $request->file());
+    
         $forum = Forum::findOrFail($id);
         $user = Auth::user();
-
-        
+    
+        // Cek apakah pengguna adalah pemilik forum atau superadmin
         if ($forum->author != $user->id && $user->role != 'superadmin') {
             return response()->json(['message' => 'You do not have permission to update this forum'], 403);
         }
-
+    
         $validated = $request->validate([
             'title' => 'required',
             'content' => 'required',
             'tags' => 'required',
-            'files.*' => 'file|mimes:jpeg,png,jpg',
-            'delete_files' => 'array',
-            'delete_files.*' => 'string',
+            'files.*' => 'file|mimes:jpeg,png,jpg', // Menambahkan validasi file
+            'delete_files' => 'array', // Validasi untuk file yang akan dihapus
+            'delete_files.*' => 'string', // Validasi untuk nama file yang akan dihapus
         ]);
-
+    
         $images = json_decode($forum->images, true) ?? [];
-
+    
         // Hapus gambar yang dipilih
         if ($request->has('delete_files')) {
             foreach ($request->delete_files as $deleteFile) {
@@ -166,29 +168,29 @@ class ForumController extends Controller
                 }
             }
         }
-
+    
         // Tambahkan gambar baru
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $filename = $this->RandomString();
                 $extension = $file->getClientOriginalExtension(); // Menggunakan ekstensi asli file
                 $image = $filename . '.' . $extension;
-
+    
                 Storage::putFileAs('public/forum', $file, $image);
                 $images[] = $image;
             }
         }
-
+    
         // Debugging
         Log::info('Updated Images: ' . json_encode($images));
-
+    
         $forum->update([
             'title' => $request->title,
             'content' => $request->content,
             'tags' => $request->tags,
             'images' => json_encode(array_values($images)), // Reset array keys
         ]);
-
+    
         return new ForumResource($forum->loadMissing('writer:id,username'));
     }
 }
